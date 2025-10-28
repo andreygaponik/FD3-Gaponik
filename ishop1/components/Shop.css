@@ -1,0 +1,27 @@
+﻿.shop {
+  border: 1px solid #000;
+  padding: 20px;
+  width: 800px
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr,
+table td {
+  border: 1px solid #ccc;
+}
+
+table th {
+  padding: 20px;
+}
+
+table td {
+  text-align: center;
+}
+
+table img {
+  height: 100px;
+}
