@@ -4,7 +4,20 @@ import Product from './Product';
 
 class Products extends React.Component {
   state = {
+    shopData: this.props.shopData,
     activeProductId: null,
+  };
+
+  deleteProduct = (id) => {
+    const confirmDelete = confirm('Действительно удалить товар?');
+
+    if (confirmDelete) {
+      this.setState((prevState) => {
+        return {
+          shopData: prevState.shopData.filter((product) => product.id !== id),
+        };
+      });
+    }
   };
 
   productSelect = (id) => {
@@ -24,8 +37,8 @@ class Products extends React.Component {
         </thead>
 
         <tbody>
-          {this.props.shopData &&
-            this.props.shopData.map((product) => (
+          {this.state.shopData &&
+            this.state.shopData.map((product) => (
               <Product
                 title={product.title}
                 price={product.price}
@@ -35,7 +48,7 @@ class Products extends React.Component {
                 id={product.id}
                 isActive={this.state.activeProductId === product.id}
                 productSelectHandler={this.productSelect}
-                deleteProductHandler={this.props.deleteProductHandler}
+                deleteProductHandler={this.deleteProduct}
               />
             ))}
         </tbody>
