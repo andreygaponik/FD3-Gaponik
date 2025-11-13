@@ -1,0 +1,41 @@
+﻿.shop {
+  border: 1px solid #000;
+  padding: 20px;
+  width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.shop h1,
+.shop h2 {
+  width: 100%;
+  margin-bottom: 0px
+}
+
+table {
+  width: 500px;
+  border-collapse: collapse;
+}
+
+table tr,
+table td {
+  border: 1px solid #ccc;
+}
+
+table th {
+  padding: 20px;
+}
+
+table td {
+  text-align: center;
+}
+
+table img {
+  height: 100px;
+}
+
+table tr.active {
+  background: #e96f24;
+}
