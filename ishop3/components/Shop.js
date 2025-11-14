@@ -8,35 +8,12 @@ import ProductDetails from './ProductDetails';
 import AddProduct from './AddProduct';
 
 class Shop extends React.Component {
-  static propTypes = {
-    shopData: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        title: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        img: PropTypes.string.isRequired,
-        stock: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  };
-
   state = {
     shopData: this.props.shopData,
     activeProductId: null,
     selectedProduct: null,
-    isShowProductAdd: false,
-    isShowProductInfo: false,
-    isShowProductDetails: false,
-  };
-
-  handleProductSelect = (id) => {
-    this.setState({ activeProductId: id });
-    this.showProductInfo(this.state.shopData.filter((product) => product.id === id));
-  };
-
-  handleProductEdit = (id) => {
-    this.setState({ activeProductId: id });
-    this.showProductDetails(this.state.shopData.filter((product) => product.id === id));
+    cardMode: '',
+    hasChanges: false,
   };
 
   handleProductDelete = (id) => {
@@ -51,38 +28,61 @@ class Shop extends React.Component {
     }
   };
 
+  handleOpenProductCard = (id, mode) => {
+    const product = this.state.shopData.find((product) => product.id === id);
+
+    this.setState({
+      activeProductId: id,
+      cardMode: mode,
+      selectedProduct: product,
+    });
+  };
+
+  handleProductAdd = (product) => {
+    this.setState((prevState) => {
+      return {
+        shopData: [...prevState.shopData, product],
+        hasChanges: false,
+      };
+    });
+  };
+
+  handleProductEditSave = (updatedProduct) => {
+    this.setState((prevState) => {
+      return {
+        shopData: prevState.shopData.map((product) =>
+          product.id === updatedProduct.id ? updatedProduct : product,
+        ),
+        hasChanges: false,
+      };
+    });
+  };
+
+  showProductAddForm = () => {
+    this.setState({
+      activeProductId: null,
+      selectedProduct: null,
+      cardMode: 'add',
+    });
+  };
+
+  resetCardMode = () => {
+    this.setState({
+      cardMode: '',
+      hasChanges: false,
+    });
+  };
+
   showProductInfo = (product) => {
     this.setState({
       selectedProduct: product,
-      isShowProductInfo: true,
-      isShowProductDetails: false,
+      cardMode: 'edit',
     });
   };
 
-  showProductDetails = (product) => {
+  getChangesStatus = (hasChanges) => {
     this.setState({
-      selectedProduct: product,
-      isShowProductInfo: false,
-      isShowProductDetails: true,
-    });
-  };
-
-  handleToggleFormAddProduct = (isShow) => {
-    this.setState({
-      isShowProductAdd: isShow,
-    });
-  };
-
-  handleAddProduct = (product) => {
-    const newProduct = {
-      ...product,
-      id: crypto.randomUUID(),
-    };
-
-    this.setState((prevState) => {
-      return {
-        shopData: [...prevState.shopData, newProduct],
-      };
+      hasChanges,
     });
   };
 
@@ -93,25 +93,32 @@ class Shop extends React.Component {
         <h2>{this.props.address}</h2>
         <Products
           shopData={this.state.shopData}
-          handleProductSelect={this.handleProductSelect}
           handleProductDelete={this.handleProductDelete}
-          handleProductEdit={this.handleProductEdit}
+          handleOpenProductCard={this.handleOpenProductCard}
           activeProductId={this.state.activeProductId}
+          hasChanges={this.state.hasChanges}
         />
-        {this.state.isShowProductInfo && (
-          <ProductInfo selectedProduct={this.state.selectedProduct} />
-        )}
-        {this.state.isShowProductDetails && (
-          <ProductDetails editedProduct={this.state.selectedProduct} />
-        )}
-        {this.state.isShowProductAdd && (
+        {(this.state.cardMode === 'edit' || this.state.cardMode === 'add') && (
           <AddProduct
-            onToggleFormAddProduct={this.handleToggleFormAddProduct}
-            onAddProduct={this.handleAddProduct}
+            onAddProduct={this.handleProductAdd}
+            cardMode={this.state.cardMode}
+            selectedProduct={this.state.selectedProduct}
+            onEditProduct={this.handleProductEditSave}
+            getChangesStatus={this.getChangesStatus}
+            onResetCardMode={this.resetCardMode}
+            key={this.state.cardMode === 'edit' ? this.state.selectedProduct.id : 'add'}
           />
         )}
-        {!this.state.isShowProductAdd && (
-          <button onClick={() => this.handleToggleFormAddProduct(true)}>Add new product</button>
+        {this.state.cardMode !== 'add' && this.state.cardMode !== 'edit' && (
+          <button
+            onClick={() => {
+              this.showProductAddForm();
+            }}>
+            Add new product
+          </button>
+        )}
+        {this.state.cardMode === 'select' && (
+          <ProductInfo selectedProduct={this.state.selectedProduct} />
         )}
       </div>
     );

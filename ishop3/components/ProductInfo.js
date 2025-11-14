@@ -1,17 +1,16 @@
 import React from 'react';
 
 class ProductInfo extends React.Component {
-	render() {
+  render() {
+    return (
+      <div className="product-info">
+        <h2>Product info</h2>
 
-		return (
-			<div className="product-info">
-				<h2>Product info</h2>
-
-				<p>{this.props.selectedProduct[0].title}</p>
-				<p>Price: {this.props.selectedProduct[0].price}</p>
-			</div>
-		)
-	}
+        <p>{this.props.selectedProduct.title}</p>
+        <p>Price: {this.props.selectedProduct.price}</p>
+      </div>
+    );
+  }
 }
 
 export default ProductInfo;

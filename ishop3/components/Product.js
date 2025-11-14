@@ -5,7 +5,11 @@ class Product extends React.Component {
     return (
       <tr
         className={this.props.isActive ? 'active' : undefined}
-        onClick={() => this.props.onProductSelect(this.props.id)}>
+        onClick={() => {
+          if (!this.props.hasChanges) {
+            this.props.onOpenProductCard(this.props.id, 'select');
+          }
+        }}>
         <td>{this.props.title}</td>
         <td>{this.props.id}</td>
         <td>{this.props.price}$</td>
@@ -16,14 +20,16 @@ class Product extends React.Component {
             onClick={(e) => {
               e.stopPropagation();
               this.props.onProductDelete(this.props.id);
-            }}>
+            }}
+            disabled={this.props.hasChanges}>
             delete
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              this.props.onProductEdit(this.props.id);
-            }}>
+              this.props.onOpenProductCard(this.props.id, 'edit');
+            }}
+            disabled={this.props.hasChanges}>
             edit
           </button>
         </td>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Product from './Product';
 
@@ -27,9 +28,9 @@ class Products extends React.Component {
                 key={product.id}
                 id={product.id}
                 isActive={this.props.activeProductId === product.id}
-                onProductSelect={this.props.handleProductSelect}
                 onProductDelete={this.props.handleProductDelete}
-                onProductEdit={this.props.handleProductEdit}
+                onOpenProductCard={this.props.handleOpenProductCard}
+                hasChanges={this.props.hasChanges}
               />
             ))}
         </tbody>
