@@ -54,8 +54,9 @@ class Shop extends React.Component {
         shopData: prevState.shopData.map((product) =>
           product.id === updatedProduct.id ? updatedProduct : product,
         ),
+        selectedProduct: updatedProduct,
         hasChanges: false,
-        cardMode: '',
+        cardMode: 'select',
       };
     });
   };
