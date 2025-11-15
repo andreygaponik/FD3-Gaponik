@@ -11,6 +11,7 @@ class AddProduct extends React.Component {
         id: this.props.cardMode === 'edit' ? this.props.selectedProduct.id : '',
       },
       isShowErrors: false,
+      isValidForm: true,
     };
   };
 
@@ -38,8 +39,16 @@ class AddProduct extends React.Component {
 
       this.props.getChangesStatus(hasChanges);
 
+      const hasEmptyFields =
+        !updatedProduct.title.trim() ||
+        !updatedProduct.price.trim() ||
+        !updatedProduct.img.trim() ||
+        !updatedProduct.stock.trim();
+
       return {
         product: updatedProduct,
+        isShowErrors: hasEmptyFields,
+        isValidForm: hasEmptyFields,
       };
     });
   };
@@ -114,7 +123,9 @@ class AddProduct extends React.Component {
             <p style={{ color: 'red' }}>Please, fill the field.</p>
           )}
 
-          <button onClick={this.handleSaveForm}>Save</button>
+          <button onClick={this.handleSaveForm} disabled={this.state.isValidForm}>
+            Save
+          </button>
           <button onClick={this.handleCloseForm}>Cancel</button>
         </form>
       </div>

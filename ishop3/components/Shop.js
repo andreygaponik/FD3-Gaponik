@@ -43,6 +43,7 @@ class Shop extends React.Component {
       return {
         shopData: [...prevState.shopData, product],
         hasChanges: false,
+        cardMode: '',
       };
     });
   };
@@ -54,6 +55,7 @@ class Shop extends React.Component {
           product.id === updatedProduct.id ? updatedProduct : product,
         ),
         hasChanges: false,
+        cardMode: '',
       };
     });
   };
