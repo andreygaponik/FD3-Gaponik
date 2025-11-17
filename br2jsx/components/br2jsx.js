@@ -4,10 +4,12 @@ import './Br2jsx.css';
 
 class Br2jsx extends React.Component {
   render() {
-    const replacesBr = this.props.text.replace(/<br\s*\/?>/g, '<br>').split(/(<br>)/g);
+    const replacesBr = this.props.text.split(/(<br\s*\/?>)/g);
 
     return (
-      <div className="br2jsx">{replacesBr.map((item) => (item === '<br>' ? <br /> : item))}</div>
+      <div className="br2jsx">
+        {replacesBr.map((item, index) => (item.startsWith('<br') ? <br key={index} /> : item))}
+      </div>
     );
   }
 }
