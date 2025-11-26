@@ -33,6 +33,8 @@ class AddUser extends React.PureComponent {
   };
 
   render() {
+    console.log('AddUser rendered');
+
     return (
       <tr>
         <th>
