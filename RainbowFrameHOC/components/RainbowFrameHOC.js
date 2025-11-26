@@ -18,7 +18,7 @@ function withRainbowFrame(colors) {
   return function Borders(Component) {
     return class extends React.Component {
       render() {
-        let content = <Component {...this.props}>{this.props.children}</Component>;
+        let content = <Component {...this.props} />;
 
         colors.forEach((el) => {
           content = <div style={{ border: `5px solid ${el}`, margin: '5px' }}>{content}</div>;
