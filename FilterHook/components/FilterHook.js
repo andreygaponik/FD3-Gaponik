@@ -1,102 +1,61 @@
-import React, { useReducer } from 'react';
+import React, { useState } from 'react';
 import List from './List';
 import Controls from './Controls';
 
-const initialState = {
-  arrayOfStrings: [],
-  originalArrayOfStrings: [],
-  inputValue: '',
-  checkboxIsChecked: false,
-};
+const FilterHook = (props) => {
+  const [arrayOfStrings, setArrayOfStrings] = useState(props.arrayOfStrings);
+  const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
-const ACTIONS = {
-  RESET: 'RESET',
-  SORT: 'SORT',
-  SEARCH: 'SEARCH',
-};
+  const getFilteredFromQuery = (inputValue) => {
+    return props.arrayOfStrings.filter((string) =>
+      string.toLowerCase().includes(inputValue.toLowerCase()),
+    );
+  };
 
-const getFilteredFromQuery = (originalArrayOfStrings, inputValue) => {
-  return originalArrayOfStrings.filter((string) =>
-    string.toLowerCase().includes(inputValue.toLowerCase()),
-  );
-};
+  const handleSortToggle = (event) => {
+    const isChecked = event.target.checked;
 
-const appReducer = (state, action) => {
-  switch (action.type) {
-    case ACTIONS.RESET: {
-      return {
-        ...initialState,
-        arrayOfStrings: action.payload,
-        originalArrayOfStrings: action.payload,
-      };
-    }
+    setCheckboxIsChecked(isChecked);
 
-    case ACTIONS.SORT: {
-      const isChecked = action.payload;
-
+    setArrayOfStrings((prevState) => {
       let sortedArray;
 
       if (isChecked) {
-        sortedArray = [...state.arrayOfStrings].sort();
+        sortedArray = [...prevState].sort();
       } else {
-        sortedArray = getFilteredFromQuery(state.originalArrayOfStrings, state.inputValue);
+        sortedArray = getFilteredFromQuery(inputValue);
       }
 
-      return {
-        ...state,
-        checkboxIsChecked: isChecked,
-        arrayOfStrings: sortedArray,
-      };
-    }
+      return sortedArray;
+    });
+  };
 
-    case ACTIONS.SEARCH: {
-      return {
-        ...state,
-        inputValue: action.payload,
-        arrayOfStrings: getFilteredFromQuery(state.originalArrayOfStrings, action.payload),
-      };
-    }
-
-    default:
-      return state;
-  }
-};
-
-const FilterHook = (props) => {
-  console.log('FilterHook RENDERED');
-
-  const [state, dispatch] = useReducer(appReducer, {
-    ...initialState,
-    arrayOfStrings: props.arrayOfStrings,
-    originalArrayOfStrings: props.arrayOfStrings,
-  });
+  const handleSearchAndFilterChange = (event) => {
+    setInputValue(event.target.value);
+    setArrayOfStrings(getFilteredFromQuery(event.target.value));
+  };
 
   const handleReset = (event) => {
     event.preventDefault();
 
-    dispatch({ type: 'RESET', payload: props.arrayOfStrings });
-  };
-
-  const handleSortToggle = (event) => {
-    dispatch({ type: 'SORT', payload: event.target.checked });
-  };
-
-  const handleSearchAndFilterChange = (event) => {
-    dispatch({ type: 'SEARCH', payload: event.target.value });
+    setArrayOfStrings(props.arrayOfStrings);
+    setCheckboxIsChecked(false);
+    setInputValue('');
   };
 
   return (
     <div className="filter-bx">
       <Controls
-        handleReset={handleReset}
+        checkboxIsChecked={checkboxIsChecked}
         handleSortToggle={handleSortToggle}
-        checkboxIsChecked={state.checkboxIsChecked}
-        inputValue={state.inputValue}
+        inputValue={inputValue}
         handleSearchAndFilterChange={handleSearchAndFilterChange}
+        handleReset={handleReset}
       />
-      <List arrayOfStrings={state.arrayOfStrings} />
+      <List arrayOfStrings={arrayOfStrings} />
     </div>
   );
 };
 
-export default FilterHook;
+export default React.memo(FilterHook);

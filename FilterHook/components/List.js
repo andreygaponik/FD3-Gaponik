@@ -11,4 +11,4 @@ const List = (props) => {
   );
 };
 
-export default List;
+export default React.memo(List);

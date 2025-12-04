@@ -9,7 +9,12 @@ const Controls = (props) => {
       <input type="text" value={props.inputValue} onChange={props.handleSearchAndFilterChange} />
       <button>Сброс</button>
     </form>
+    // <form className="filter-controls" onSubmit={props.handleReset}>
+    //   <input type="checkbox" checked={props.checkboxIsChecked} onChange={props.handleSortToggle} />
+    //   <input type="text" value={props.inputValue} onChange={props.handleSearchAndFilterChange} />
+    //   <button>Сброс</button>
+    // </form>
   );
 };
 
-export default Controls;
+export default React.memo(Controls);

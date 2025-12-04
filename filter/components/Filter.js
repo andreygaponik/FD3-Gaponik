@@ -14,12 +14,14 @@ class Filter extends React.Component {
   state = this.getInitialState();
 
   getFilteredFromQuery = (inputValue) => {
+    // ПЕРЕНЁС
     return this.props.arrayOfStrings.filter((string) =>
       string.toLowerCase().includes(inputValue.toLowerCase()),
     );
   };
 
   handleSearchAndFilterChange = (event) => {
+    // ПЕРЕНЁС
     this.setState({
       inputValue: event.target.value,
       arrayOfStrings: this.getFilteredFromQuery(event.target.value),
