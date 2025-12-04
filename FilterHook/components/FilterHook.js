@@ -38,6 +38,7 @@ const FilterHook = (props) => {
 
   const handleReset = (event) => {
     event.preventDefault();
+    console.log('reset');
 
     setArrayOfStrings(props.arrayOfStrings);
     setCheckboxIsChecked(false);
