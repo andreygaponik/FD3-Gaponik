@@ -92,7 +92,7 @@ const MobileHook = () => {
       mobileEvents.removeListener('DELETE_USER', onDeleteUser);
       mobileEvents.removeListener('FILTER_USERS', onFilterUsers);
     };
-  });
+  }, []);
 
   console.log('Mobile rendered');
 
