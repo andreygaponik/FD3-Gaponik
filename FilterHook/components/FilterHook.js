@@ -1,46 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import List from './List';
 import Controls from './Controls';
 
 const FilterHook = (props) => {
-  const [arrayOfStrings, setArrayOfStrings] = useState(props.arrayOfStrings);
+  const [originalArrayofStrings, setoriginalArrayofStrings] = useState(props.arrayOfStrings);
+  const [displayedArrayOfStrings, setDisplayedArrayOfStrings] = useState(props.arrayOfStrings);
   const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  const getFilteredFromQuery = (inputValue) => {
-    return props.arrayOfStrings.filter((string) =>
+  useEffect(() => {
+    console.log('---USE EFFECT---');
+
+    let result = originalArrayofStrings.filter((string) =>
       string.toLowerCase().includes(inputValue.toLowerCase()),
     );
+
+    if (checkboxIsChecked) {
+      result = [...result].sort();
+    }
+
+    setDisplayedArrayOfStrings(result);
+  }, [originalArrayofStrings, checkboxIsChecked, inputValue]);
+
+  const handleSortToggle = (value) => {
+    setCheckboxIsChecked(value);
   };
 
-  const handleSortToggle = (event) => {
-    const isChecked = event.target.checked;
-
-    setCheckboxIsChecked(isChecked);
-
-    setArrayOfStrings((prevState) => {
-      let sortedArray;
-
-      if (isChecked) {
-        sortedArray = [...prevState].sort();
-      } else {
-        sortedArray = getFilteredFromQuery(inputValue);
-      }
-
-      return sortedArray;
-    });
-  };
-
-  const handleSearchAndFilterChange = (event) => {
-    setInputValue(event.target.value);
-    setArrayOfStrings(getFilteredFromQuery(event.target.value));
+  const handleSearchAndFilterChange = (value) => {
+    setInputValue(value);
   };
 
   const handleReset = (event) => {
     event.preventDefault();
-    console.log('reset');
 
-    setArrayOfStrings(props.arrayOfStrings);
+    setDisplayedArrayOfStrings(originalArrayofStrings);
     setCheckboxIsChecked(false);
     setInputValue('');
   };
@@ -54,7 +47,7 @@ const FilterHook = (props) => {
         handleSearchAndFilterChange={handleSearchAndFilterChange}
         handleReset={handleReset}
       />
-      <List arrayOfStrings={arrayOfStrings} />
+      <List arrayOfStrings={displayedArrayOfStrings} />
     </div>
   );
 };
