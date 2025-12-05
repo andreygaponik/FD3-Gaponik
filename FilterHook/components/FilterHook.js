@@ -3,7 +3,6 @@ import List from './List';
 import Controls from './Controls';
 
 const FilterHook = (props) => {
-  const [originalArrayofStrings, setoriginalArrayofStrings] = useState(props.arrayOfStrings);
   const [displayedArrayOfStrings, setDisplayedArrayOfStrings] = useState(props.arrayOfStrings);
   const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -11,16 +10,16 @@ const FilterHook = (props) => {
   useEffect(() => {
     console.log('---USE EFFECT---');
 
-    let result = originalArrayofStrings.filter((string) =>
+    let result = props.arrayOfStrings.filter((string) =>
       string.toLowerCase().includes(inputValue.toLowerCase()),
     );
 
     if (checkboxIsChecked) {
-      result = [...result].sort();
+      result = result.sort();
     }
 
     setDisplayedArrayOfStrings(result);
-  }, [originalArrayofStrings, checkboxIsChecked, inputValue]);
+  }, [props.arrayOfStrings, checkboxIsChecked, inputValue]);
 
   const handleSortToggle = (value) => {
     setCheckboxIsChecked(value);
@@ -33,7 +32,7 @@ const FilterHook = (props) => {
   const handleReset = (event) => {
     event.preventDefault();
 
-    setDisplayedArrayOfStrings(originalArrayofStrings);
+    setDisplayedArrayOfStrings(props.arrayOfStrings);
     setCheckboxIsChecked(false);
     setInputValue('');
   };
